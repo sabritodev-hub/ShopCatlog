@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <!-- Navigation -->
-    <nav class="main-nav">
+    <!-- Navigation (cachée sur la page login) -->
+    <nav v-if="!isLoginPage" class="main-nav">
       <div class="nav-container">
         <router-link to="/" class="nav-logo">
           <span class="logo-icon">🛒</span>
@@ -19,13 +19,31 @@
             <span>Catalogue</span>
           </router-link>
           
-          <router-link to="/admin" class="nav-link" active-class="nav-link-active">
+          <router-link v-if="!isAuthenticated" to="/login" class="nav-link" active-class="nav-link-active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            <span>Connexion</span>
+          </router-link>
+          
+          <router-link v-if="isAuthenticated" to="/admin" class="nav-link" active-class="nav-link-active">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 20h9"></path>
               <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
             </svg>
             <span>Admin</span>
           </router-link>
+          
+          <button v-if="isAuthenticated" class="nav-link logout-btn" @click="handleLogout">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Déconnexion</span>
+          </button>
         </div>
       </div>
     </nav>
@@ -35,8 +53,8 @@
       <router-view />
     </main>
     
-    <!-- Footer -->
-    <footer class="main-footer">
+    <!-- Footer (caché sur la page login) -->
+    <footer v-if="!isLoginPage" class="main-footer">
       <div class="footer-container">
         <p>&copy; 2026 ShopCatalog. Tous droits réservés.</p>
       </div>
@@ -45,8 +63,42 @@
 </template>
 
 <script>
+import { logout, onAuthStateChange, getSession } from '@/services/authService.js'
+
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      isAuthenticated: false,
+      unsubscribe: null
+    }
+  },
+  computed: {
+    isLoginPage() {
+      return this.$route.name === 'Login'
+    }
+  },
+  async mounted() {
+    // Vérifier la session initiale
+    const session = await getSession()
+    this.isAuthenticated = !!session
+    
+    // Écouter les changements d'authentification
+    this.unsubscribe = onAuthStateChange((event, session) => {
+      this.isAuthenticated = !!session
+    })
+  },
+  beforeUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe()
+    }
+  },
+  methods: {
+    async handleLogout() {
+      await logout()
+      this.$router.push('/')
+    }
+  }
 }
 </script>
 
@@ -157,5 +209,18 @@ export default {
   .nav-link {
     padding: var(--spacing-3);
   }
+}
+
+/* Logout button */
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+}
+
+.logout-btn:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
 }
 </style>

@@ -2,8 +2,20 @@
   <div class="admin-page">
     <header class="admin-header">
       <div class="header-content">
-        <h1>Administration</h1>
-        <p class="header-subtitle">Gérez vos articles</p>
+        <div class="header-main">
+          <div>
+            <h1>Administration</h1>
+            <p class="header-subtitle">Gérez vos articles</p>
+          </div>
+          <div class="header-nav">
+            <router-link to="/admin/categories" class="nav-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>
+              </svg>
+              Catégories
+            </router-link>
+          </div>
+        </div>
       </div>
     </header>
     
@@ -142,11 +154,11 @@ import { BaseButton, BaseInput, BaseSelect, BaseBadge, BaseModal } from '@/compo
 import ArticleForm from '@/components/articles/ArticleForm.vue'
 import { 
   getArticles, 
-  getCategories, 
   createArticle, 
   updateArticle, 
   deleteArticle 
 } from '@/services/articleService.js'
+import { getCategories } from '@/services/categoryService.js'
 
 export default {
   name: 'AdminPage',
@@ -176,7 +188,7 @@ export default {
     categoryOptions() {
       return [
         { value: '', label: 'Toutes les catégories' },
-        ...this.categories.map(cat => ({ value: cat, label: cat }))
+        ...this.categories.map(cat => ({ value: cat.nom, label: cat.nom }))
       ]
     },
     filteredArticles() {
@@ -186,7 +198,7 @@ export default {
         const query = this.searchQuery.toLowerCase()
         result = result.filter(article =>
           article.nom.toLowerCase().includes(query) ||
-          article.categorie.toLowerCase().includes(query)
+          (article.categorie && article.categorie.toLowerCase().includes(query))
         )
       }
       
@@ -296,6 +308,36 @@ export default {
 .header-content {
   max-width: var(--container-max-width);
   margin: 0 auto;
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.header-nav {
+  display: flex;
+  gap: var(--spacing-3);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .admin-header h1 {

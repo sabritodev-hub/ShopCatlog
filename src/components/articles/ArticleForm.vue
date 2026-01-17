@@ -39,10 +39,10 @@
       </div>
       
       <BaseSelect
-        v-model="form.categorie"
+        v-model="form.categorie_id"
         label="Catégorie"
         :options="categorieOptions"
-        :error="errors.categorie"
+        :error="errors.categorie_id"
         required
       />
       
@@ -77,7 +77,7 @@
 
 <script>
 import { BaseModal, BaseInput, BaseSelect, BaseButton } from '@/components/ui'
-import { getCategories } from '@/services/articleService.js'
+import { getCategories } from '@/services/categoryService.js'
 
 export default {
   name: 'ArticleForm',
@@ -105,7 +105,7 @@ export default {
         prix: '',
         quantite: '',
         photo: '',
-        categorie: ''
+        categorie_id: ''
       },
       errors: {},
       categories: [],
@@ -119,8 +119,8 @@ export default {
     },
     categorieOptions() {
       return this.categories.map(cat => ({
-        value: cat,
-        label: cat
+        value: cat.id.toString(),
+        label: cat.nom
       }))
     }
   },
@@ -153,7 +153,7 @@ export default {
           prix: this.article.prix.toString(),
           quantite: this.article.quantite.toString(),
           photo: this.article.photo,
-          categorie: this.article.categorie
+          categorie_id: this.article.categorie_id?.toString() || ''
         }
       }
     },
@@ -172,8 +172,8 @@ export default {
         this.errors.quantite = 'La quantité doit être positive'
       }
       
-      if (!this.form.categorie) {
-        this.errors.categorie = 'La catégorie est requise'
+      if (!this.form.categorie_id) {
+        this.errors.categorie_id = 'La catégorie est requise'
       }
       
       if (!this.form.photo.trim()) {
@@ -193,7 +193,7 @@ export default {
           prix: parseFloat(this.form.prix),
           quantite: parseInt(this.form.quantite),
           photo: this.form.photo.trim(),
-          categorie: this.form.categorie
+          categorie_id: parseInt(this.form.categorie_id)
         }
         
         if (this.isEditMode) {
@@ -212,7 +212,7 @@ export default {
         prix: '',
         quantite: '',
         photo: '',
-        categorie: ''
+        categorie_id: ''
       }
       this.errors = {}
       this.imageError = false
