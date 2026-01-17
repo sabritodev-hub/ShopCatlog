@@ -19,9 +19,11 @@
     
     <template #footer>
       <slot name="actions">
-        <BaseButton variant="primary" size="sm" full-width>
-          Voir détails
-        </BaseButton>
+        <router-link :to="`/article/${article.id}`" class="detail-link">
+          <BaseButton variant="primary" size="sm" full-width>
+            Voir détails
+          </BaseButton>
+        </router-link>
       </slot>
     </template>
   </BaseCard>
@@ -129,5 +131,11 @@ export default {
 
 .stock-empty {
   color: var(--color-danger);
+}
+
+.detail-link {
+  text-decoration: none;
+  display: block;
+  width: 100%;
 }
 </style>

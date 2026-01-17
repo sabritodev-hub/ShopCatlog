@@ -1,6 +1,7 @@
 -- =============================================
 -- Script de MIGRATION pour ShopCatalog
 -- Modifie les tables existantes (categories + articles)
+-- Ajoute le support multi-photos avec Supabase Storage
 -- NE TOUCHE PAS à la table users
 -- À exécuter dans: Supabase Dashboard > SQL Editor
 -- =============================================
@@ -69,7 +70,7 @@ CREATE TRIGGER update_categories_updated_at
   EXECUTE FUNCTION update_updated_at_column();
 
 -- =============================================
--- 3. TABLE ARTICLES - Mise à jour avec categorie_id
+-- 3. TABLE ARTICLES - Mise à jour avec categorie_id et photos multiples
 -- =============================================
 
 -- Si la table articles existe mais n'a pas categorie_id, on doit la modifier
@@ -105,14 +106,46 @@ BEGIN
         ON DELETE RESTRICT;
     END IF;
     
+    -- Ajouter les colonnes pour photos supplémentaires
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'articles' AND column_name = 'photo_2') THEN
+      ALTER TABLE articles ADD COLUMN photo_2 TEXT;
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'articles' AND column_name = 'photo_3') THEN
+      ALTER TABLE articles ADD COLUMN photo_3 TEXT;
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'articles' AND column_name = 'photo_4') THEN
+      ALTER TABLE articles ADD COLUMN photo_4 TEXT;
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'articles' AND column_name = 'photo_5') THEN
+      ALTER TABLE articles ADD COLUMN photo_5 TEXT;
+    END IF;
+    
+    -- Ajouter description de l'article
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'articles' AND column_name = 'description') THEN
+      ALTER TABLE articles ADD COLUMN description TEXT;
+    END IF;
+    
   ELSE
     -- Créer la table articles si elle n'existe pas
     CREATE TABLE articles (
       id BIGSERIAL PRIMARY KEY,
       nom VARCHAR(255) NOT NULL,
+      description TEXT,
       prix DECIMAL(10, 2) NOT NULL,
       quantite INTEGER NOT NULL DEFAULT 0,
       photo TEXT NOT NULL,
+      photo_2 TEXT,
+      photo_3 TEXT,
+      photo_4 TEXT,
+      photo_5 TEXT,
       categorie_id BIGINT NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -207,7 +240,13 @@ INSERT INTO categories (nom, description, couleur) VALUES
 ON CONFLICT (nom) DO NOTHING;
 
 -- =============================================
--- 6. VÉRIFICATION FINALE
+-- 6. CONFIGURATION SUPABASE STORAGE
+-- =============================================
+-- IMPORTANT: Le bucket doit être créé manuellement dans Supabase Dashboard
+-- Aller dans: Storage > New Bucket > Nom: "articles" > Public: ON
+
+-- =============================================
+-- 7. VÉRIFICATION FINALE
 -- =============================================
 SELECT 
   'Migration terminée avec succès!' AS status,

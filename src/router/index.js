@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CatalogPage from '@/pages/CatalogPage.vue'
+import ArticleDetailPage from '@/pages/ArticleDetailPage.vue'
 import AdminPage from '@/pages/AdminPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import CategoriesPage from '@/pages/CategoriesPage.vue'
@@ -12,6 +13,14 @@ const routes = [
     component: CatalogPage,
     meta: {
       title: 'Catalogue - ShopCatalog'
+    }
+  },
+  {
+    path: '/article/:id',
+    name: 'ArticleDetail',
+    component: ArticleDetailPage,
+    meta: {
+      title: 'Détail article - ShopCatalog'
     }
   },
   {

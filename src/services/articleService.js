@@ -142,9 +142,14 @@ export async function createArticle(articleData) {
     const newArticle = {
       id: Math.max(...mockData.map(a => a.id), 0) + 1,
       nom: articleData.nom,
+      description: articleData.description || null,
       prix: parseFloat(articleData.prix),
       quantite: parseInt(articleData.quantite),
       photo: articleData.photo,
+      photo_2: articleData.photo_2 || null,
+      photo_3: articleData.photo_3 || null,
+      photo_4: articleData.photo_4 || null,
+      photo_5: articleData.photo_5 || null,
       categorie_id: articleData.categorie_id,
       categorie: articleData.categorie
     }
@@ -156,9 +161,14 @@ export async function createArticle(articleData) {
     .from(TABLE_NAME)
     .insert([{
       nom: articleData.nom,
+      description: articleData.description || null,
       prix: parseFloat(articleData.prix),
       quantite: parseInt(articleData.quantite),
       photo: articleData.photo,
+      photo_2: articleData.photo_2 || null,
+      photo_3: articleData.photo_3 || null,
+      photo_4: articleData.photo_4 || null,
+      photo_5: articleData.photo_5 || null,
       categorie_id: articleData.categorie_id
     }])
     .select(`
@@ -202,9 +212,14 @@ export async function updateArticle(id, articleData) {
     .from(TABLE_NAME)
     .update({
       nom: articleData.nom,
+      description: articleData.description || null,
       prix: parseFloat(articleData.prix),
       quantite: parseInt(articleData.quantite),
       photo: articleData.photo,
+      photo_2: articleData.photo_2 || null,
+      photo_3: articleData.photo_3 || null,
+      photo_4: articleData.photo_4 || null,
+      photo_5: articleData.photo_5 || null,
       categorie_id: articleData.categorie_id
     })
     .eq('id', id)

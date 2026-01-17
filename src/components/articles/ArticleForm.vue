@@ -2,7 +2,7 @@
   <BaseModal
     :model-value="modelValue"
     :title="isEditMode ? 'Modifier l\'article' : 'Ajouter un article'"
-    size="md"
+    size="lg"
     @update:model-value="$emit('update:modelValue', $event)"
     @close="resetForm"
   >
@@ -13,6 +13,13 @@
         placeholder="Ex: iPhone 15 Pro"
         :error="errors.nom"
         required
+      />
+      
+      <BaseInput
+        v-model="form.description"
+        label="Description"
+        placeholder="Description détaillée de l'article..."
+        :error="errors.description"
       />
       
       <div class="form-row">
@@ -46,17 +53,45 @@
         required
       />
       
-      <BaseInput
-        v-model="form.photo"
-        label="URL de la photo"
-        placeholder="https://example.com/image.jpg"
-        :error="errors.photo"
-        required
-      />
+      <!-- Photo de couverture -->
+      <div class="photos-section">
+        <h3 class="section-title">Photo de couverture *</h3>
+        <ImageUploader
+          v-model="form.photo"
+          folder="covers"
+          required
+          @uploaded="handleCoverUploaded"
+        />
+        <p v-if="errors.photo" class="field-error">{{ errors.photo }}</p>
+      </div>
       
-      <div v-if="form.photo" class="image-preview">
-        <p class="preview-label">Aperçu :</p>
-        <img :src="form.photo" :alt="form.nom" @error="handleImageError" />
+      <!-- Photos supplémentaires -->
+      <div class="photos-section">
+        <h3 class="section-title">Photos supplémentaires (optionnel)</h3>
+        <p class="section-description">Ajoutez jusqu'à 4 photos supplémentaires pour la galerie</p>
+        
+        <div class="gallery-grid">
+          <ImageUploader
+            v-model="form.photo_2"
+            label="Photo 2"
+            folder="gallery"
+          />
+          <ImageUploader
+            v-model="form.photo_3"
+            label="Photo 3"
+            folder="gallery"
+          />
+          <ImageUploader
+            v-model="form.photo_4"
+            label="Photo 4"
+            folder="gallery"
+          />
+          <ImageUploader
+            v-model="form.photo_5"
+            label="Photo 5"
+            folder="gallery"
+          />
+        </div>
       </div>
     </form>
     
@@ -76,7 +111,7 @@
 </template>
 
 <script>
-import { BaseModal, BaseInput, BaseSelect, BaseButton } from '@/components/ui'
+import { BaseModal, BaseInput, BaseSelect, BaseButton, ImageUploader } from '@/components/ui'
 import { getCategories } from '@/services/categoryService.js'
 
 export default {
@@ -85,7 +120,8 @@ export default {
     BaseModal,
     BaseInput,
     BaseSelect,
-    BaseButton
+    BaseButton,
+    ImageUploader
   },
   props: {
     modelValue: {
@@ -102,15 +138,19 @@ export default {
     return {
       form: {
         nom: '',
+        description: '',
         prix: '',
         quantite: '',
         photo: '',
+        photo_2: '',
+        photo_3: '',
+        photo_4: '',
+        photo_5: '',
         categorie_id: ''
       },
       errors: {},
       categories: [],
-      loading: false,
-      imageError: false
+      loading: false
     }
   },
   computed: {
@@ -150,9 +190,14 @@ export default {
       if (this.article) {
         this.form = {
           nom: this.article.nom,
+          description: this.article.description || '',
           prix: this.article.prix.toString(),
           quantite: this.article.quantite.toString(),
           photo: this.article.photo,
+          photo_2: this.article.photo_2 || '',
+          photo_3: this.article.photo_3 || '',
+          photo_4: this.article.photo_4 || '',
+          photo_5: this.article.photo_5 || '',
           categorie_id: this.article.categorie_id?.toString() || ''
         }
       }
@@ -177,7 +222,7 @@ export default {
       }
       
       if (!this.form.photo.trim()) {
-        this.errors.photo = 'L\'URL de la photo est requise'
+        this.errors.photo = 'La photo de couverture est requise'
       }
       
       return Object.keys(this.errors).length === 0
@@ -190,9 +235,14 @@ export default {
       try {
         const articleData = {
           nom: this.form.nom.trim(),
+          description: this.form.description.trim() || null,
           prix: parseFloat(this.form.prix),
           quantite: parseInt(this.form.quantite),
           photo: this.form.photo.trim(),
+          photo_2: this.form.photo_2.trim() || null,
+          photo_3: this.form.photo_3.trim() || null,
+          photo_4: this.form.photo_4.trim() || null,
+          photo_5: this.form.photo_5.trim() || null,
           categorie_id: parseInt(this.form.categorie_id)
         }
         
@@ -206,23 +256,27 @@ export default {
         this.loading = false
       }
     },
+    handleCoverUploaded(result) {
+      console.log('Photo de couverture uploadée:', result.url)
+    },
     resetForm() {
       this.form = {
         nom: '',
+        description: '',
         prix: '',
         quantite: '',
         photo: '',
+        photo_2: '',
+        photo_3: '',
+        photo_4: '',
+        photo_5: '',
         categorie_id: ''
       }
       this.errors = {}
-      this.imageError = false
     },
     close() {
       this.$emit('update:modelValue', false)
       this.resetForm()
-    },
-    handleImageError() {
-      this.imageError = true
     }
   }
 }
@@ -247,24 +301,42 @@ export default {
   }
 }
 
-.image-preview {
+.photos-section {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-border-light);
 }
 
-.preview-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+.section-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   margin: 0;
 }
 
-.image-preview img {
-  max-width: 200px;
-  max-height: 150px;
-  object-fit: cover;
-  border-radius: var(--border-radius-lg);
-  border: var(--border-width-thin) solid var(--color-border-light);
+.section-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-3);
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field-error {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin: 0;
 }
 </style>
