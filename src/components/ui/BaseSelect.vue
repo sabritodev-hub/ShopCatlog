@@ -123,10 +123,11 @@ export default {
 </script>
 
 <style scoped>
+/* ===== BASE SELECT - LIQUID GLASS ===== */
 .select-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-1);
+  gap: var(--spacing-2);
 }
 
 .select-wrapper-full-width {
@@ -140,7 +141,7 @@ export default {
 }
 
 .select-required {
-  color: var(--color-danger);
+  color: var(--color-danger-light);
   margin-left: var(--spacing-1);
 }
 
@@ -148,73 +149,104 @@ export default {
   position: relative;
 }
 
+/* Select field - Glass pour fond clair */
 .select-field {
   width: 100%;
-  border: var(--border-width-thin) solid var(--color-border-default);
-  border-radius: var(--border-radius-lg);
-  background-color: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: var(--color-text-primary);
   cursor: pointer;
   appearance: none;
   padding-right: var(--spacing-10);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-bounce);
+  box-shadow: var(--shadow-glass);
+}
+
+.select-field:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .select-field:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-bg);
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 
+    0 0 0 4px rgba(56, 189, 248, 0.15),
+    var(--shadow-glass);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Style dropdown options */
+.select-field option {
+  background: white;
+  color: var(--color-text-primary);
+  padding: var(--spacing-2);
 }
 
 /* Sizes */
 .select-sm {
-  padding: var(--spacing-2) var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--font-size-sm);
 }
 
 .select-md {
-  padding: var(--spacing-2) var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-5);
   font-size: var(--font-size-base);
 }
 
 .select-lg {
-  padding: var(--spacing-3) var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-5);
   font-size: var(--font-size-lg);
 }
 
 /* Arrow */
 .select-arrow {
   position: absolute;
-  right: var(--spacing-3);
+  right: var(--spacing-4);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   pointer-events: none;
+  transition: transform var(--transition-bounce);
+}
+
+.select-field:focus + .select-arrow {
+  transform: translateY(-50%) rotate(180deg);
 }
 
 /* Error state */
 .select-error-state {
-  border-color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 .select-error-state:focus {
-  border-color: var(--color-danger);
-  box-shadow: 0 0 0 3px var(--color-danger-bg);
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 
+    0 0 0 4px rgba(239, 68, 68, 0.15),
+    var(--shadow-glass);
 }
 
 .select-error {
   font-size: var(--font-size-sm);
-  color: var(--color-danger);
+  color: var(--color-danger-light);
 }
 
 .select-hint {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 /* Disabled state */
 .select-wrapper-disabled .select-field {
-  background-color: var(--color-gray-100);
+  background: rgba(255, 255, 255, 0.05);
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.5;
+}
+
+.select-wrapper-disabled .select-arrow {
+  opacity: 0.5;
 }
 </style>

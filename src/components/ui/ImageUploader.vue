@@ -179,10 +179,11 @@ export default {
 </script>
 
 <style scoped>
+/* ===== IMAGE UPLOADER - LIQUID GLASS ===== */
 .image-uploader {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
+  gap: var(--spacing-3);
 }
 
 .uploader-label {
@@ -191,71 +192,89 @@ export default {
   color: var(--color-text-primary);
 }
 
+/* Upload zone - Glass card */
 .upload-zone {
-  border: 2px dashed var(--color-border);
-  border-radius: var(--border-radius-lg);
-  transition: all 0.2s ease;
+  position: relative;
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-2xl);
+  transition: all var(--transition-bounce);
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
 }
 
 .upload-zone.dragging {
-  border-color: var(--color-primary);
-  background-color: var(--color-primary-light);
+  border-color: rgba(56, 189, 248, 0.6);
+  background: rgba(56, 189, 248, 0.08);
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
 }
 
 .upload-zone.has-image {
   border-style: solid;
-  border-color: var(--color-border-light);
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
+/* Drop zone */
 .drop-zone {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-8);
+  padding: var(--spacing-10);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all var(--transition-bounce);
 }
 
 .drop-zone:hover {
-  background-color: var(--color-bg-secondary);
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
 }
 
 .drop-zone svg {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   margin-bottom: var(--spacing-4);
+  opacity: 0.7;
+  transition: all var(--transition-bounce);
+}
+
+.drop-zone:hover svg {
+  color: var(--color-primary);
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .drop-text {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-1);
+  gap: var(--spacing-2);
   margin: 0;
 }
 
 .drop-text .primary {
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
 }
 
 .drop-text .secondary {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
+/* Image preview */
 .image-preview {
   position: relative;
 }
 
 .image-preview img {
   width: 100%;
-  max-height: 200px;
+  max-height: 220px;
   object-fit: cover;
   display: block;
 }
 
+/* Actions overlay */
 .image-actions {
   position: absolute;
   bottom: 0;
@@ -263,67 +282,106 @@ export default {
   right: 0;
   display: flex;
   gap: var(--spacing-2);
-  padding: var(--spacing-2);
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  padding: var(--spacing-3);
+  background: linear-gradient(
+    transparent,
+    rgba(0, 0, 0, 0.7)
+  );
 }
 
 .action-btn {
   display: flex;
   align-items: center;
-  gap: var(--spacing-1);
-  padding: var(--spacing-2) var(--spacing-3);
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
   border: none;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-bounce);
+  backdrop-filter: blur(10px);
 }
 
 .action-btn.change {
-  background-color: white;
-  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-gray-800);
 }
 
 .action-btn.change:hover {
-  background-color: var(--color-bg-secondary);
+  background: white;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .action-btn.remove {
-  background-color: var(--color-error);
+  background: rgba(239, 68, 68, 0.9);
   color: white;
 }
 
 .action-btn.remove:hover {
-  opacity: 0.9;
+  background: rgba(239, 68, 68, 1);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
 }
 
+/* Progress bar */
 .upload-progress {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-1);
+  gap: var(--spacing-2);
 }
 
 .progress-bar {
-  height: 4px;
-  background-color: var(--color-bg-tertiary);
-  border-radius: 2px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: var(--color-primary);
-  transition: width 0.2s ease;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    #38bdf8 100%
+  );
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
 .progress-text {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .upload-error {
-  color: var(--color-error);
+  color: #dc2626;
   font-size: var(--font-size-sm);
   margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .drop-zone {
+    padding: var(--spacing-8);
+  }
+  
+  .drop-zone:hover {
+    transform: none;
+  }
+  
+  .drop-zone:active {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  
+  .action-btn:hover {
+    transform: none;
+  }
+  
+  .action-btn:active {
+    transform: scale(0.95);
+  }
 }
 </style>

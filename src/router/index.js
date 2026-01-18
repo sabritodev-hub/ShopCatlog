@@ -12,7 +12,7 @@ const routes = [
     name: 'Catalog',
     component: CatalogPage,
     meta: {
-      title: 'Catalogue - ShopCatalog'
+      title: 'Catalogue - Bon plan 69'
     }
   },
   {
@@ -20,7 +20,7 @@ const routes = [
     name: 'ArticleDetail',
     component: ArticleDetailPage,
     meta: {
-      title: 'Détail article - ShopCatalog'
+      title: 'Détail article - Bon plan 69'
     }
   },
   {
@@ -28,7 +28,7 @@ const routes = [
     name: 'Login',
     component: LoginPage,
     meta: {
-      title: 'Connexion - ShopCatalog'
+      title: 'Connexion - Bon plan 69'
     }
   },
   {
@@ -36,7 +36,7 @@ const routes = [
     name: 'Admin',
     component: AdminPage,
     meta: {
-      title: 'Administration - ShopCatalog',
+      title: 'Administration - Bon plan 69',
       requiresAuth: true
     }
   },
@@ -45,7 +45,7 @@ const routes = [
     name: 'Categories',
     component: CategoriesPage,
     meta: {
-      title: 'Catégories - ShopCatalog',
+      title: 'Catégories - Bon plan 69',
       requiresAuth: true
     }
   },
@@ -70,7 +70,7 @@ const router = createRouter({
 
 // Guard pour protéger les routes admin
 router.beforeEach(async (to, from, next) => {
-  document.title = to.meta.title || 'ShopCatalog'
+  document.title = to.meta.title || 'Bon plan 69'
   
   // Vérifier si la route nécessite une authentification
   if (to.meta.requiresAuth) {

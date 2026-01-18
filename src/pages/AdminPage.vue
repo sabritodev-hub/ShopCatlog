@@ -293,15 +293,20 @@ export default {
 </script>
 
 <style scoped>
+/* ===== ADMIN PAGE - LIQUID GLASS ===== */
 .admin-page {
   min-height: 100vh;
-  background-color: var(--color-bg-secondary);
+  position: relative;
+  z-index: 1;
 }
 
-/* Header */
+/* Header - Glass transparent */
 .admin-header {
-  background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--color-gray-900) 100%);
-  color: var(--color-white);
+  position: relative;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   padding: var(--spacing-8) var(--spacing-4);
 }
 
@@ -326,43 +331,60 @@ export default {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  padding: var(--spacing-2) var(--spacing-4);
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: var(--border-radius-md);
-  color: var(--color-white);
+  padding: var(--spacing-3) var(--spacing-5);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
 }
 
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .admin-header h1 {
   font-size: var(--font-size-3xl);
   margin-bottom: var(--spacing-1);
-  color: var(--color-white);
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .header-subtitle {
   font-size: var(--font-size-base);
-  opacity: 0.8;
+  color: var(--color-text-secondary);
   margin: 0;
-  color: var(--color-white);
 }
 
-/* Actions */
+/* Actions - Floating glass bar */
 .admin-actions {
-  background-color: var(--color-white);
-  padding: var(--spacing-4);
-  border-bottom: var(--border-width-thin) solid var(--color-border-light);
+  position: sticky;
+  top: var(--spacing-4);
+  z-index: var(--z-index-sticky);
+  margin: calc(-1 * var(--spacing-4)) var(--spacing-4) 0;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-5);
+  box-shadow: var(--shadow-glass);
 }
 
 .actions-container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -378,59 +400,94 @@ export default {
 }
 
 .search-input {
-  min-width: 200px;
+  min-width: 220px;
 }
 
 .category-filter {
-  min-width: 180px;
+  min-width: 200px;
 }
 
 /* Content */
 .admin-content {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: var(--spacing-6) var(--spacing-4);
+  padding: var(--spacing-8) var(--spacing-4);
 }
 
-/* Table */
+/* Table - Liquid glass */
 .table-container {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-sm);
+  position: relative;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
+}
+
+/* Reflet supérieur table */
+.table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .articles-table {
   width: 100%;
   border-collapse: collapse;
+  position: relative;
+  z-index: 1;
 }
 
 .articles-table th {
-  background-color: var(--color-gray-50);
-  padding: var(--spacing-4);
+  background: rgba(0, 0, 0, 0.03);
+  padding: var(--spacing-4) var(--spacing-5);
   text-align: left;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .articles-table td {
-  padding: var(--spacing-4);
-  border-top: var(--border-width-thin) solid var(--color-border-light);
+  padding: var(--spacing-4) var(--spacing-5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   vertical-align: middle;
+  color: var(--color-text-primary);
+}
+
+.articles-table tr {
+  transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
 .articles-table tr:hover {
-  background-color: var(--color-gray-50);
+  background: rgba(56, 189, 248, 0.1);
 }
 
 .cell-image img {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: transform var(--transition-bounce);
+}
+
+.cell-image img:hover {
+  transform: scale(1.1) rotate(2deg);
 }
 
 .cell-name {
@@ -439,63 +496,98 @@ export default {
 }
 
 .cell-price {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-light);
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
 }
 
 .cell-actions {
   display: flex;
-  gap: var(--spacing-1);
+  gap: var(--spacing-2);
 }
 
 .stock-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  padding: var(--spacing-1) var(--spacing-2);
-  border-radius: var(--border-radius-full);
+  min-width: 44px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
+  backdrop-filter: blur(10px);
 }
 
 .stock-available {
-  background-color: var(--color-success-bg);
-  color: var(--color-success-dark);
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--color-success-light);
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .stock-low {
-  background-color: var(--color-warning-bg);
-  color: var(--color-warning-dark);
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--color-warning-light);
+  border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .stock-empty {
-  background-color: var(--color-danger-bg);
-  color: var(--color-danger-dark);
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--color-danger-light);
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .text-danger {
-  color: var(--color-danger);
+  color: var(--color-danger-light);
 }
 
-/* States */
+/* States - Liquid glass */
 .loading-state,
 .empty-state {
   text-align: center;
-  padding: var(--spacing-16) var(--spacing-4);
-  color: var(--color-text-muted);
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-16) var(--spacing-6);
+  color: var(--color-text-secondary);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-glass);
 }
 
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-4);
+  gap: var(--spacing-5);
 }
 
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
+  .admin-header {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+  
+  .header-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+  }
+  
+  .admin-header h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .admin-actions {
+    margin: calc(-1 * var(--spacing-3)) var(--spacing-3) 0;
+    padding: var(--spacing-4);
+    border-radius: var(--radius-xl);
+    top: var(--spacing-3);
+  }
+  
   .actions-container {
     flex-direction: column;
     align-items: stretch;
@@ -513,10 +605,65 @@ export default {
   
   .table-container {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-xl);
   }
   
   .articles-table {
     min-width: 600px;
+  }
+  
+  .admin-content {
+    padding: var(--spacing-5) var(--spacing-3);
+  }
+  
+  /* Touch interactions */
+  .articles-table tr:hover {
+    background: transparent;
+  }
+  
+  .cell-image img:hover {
+    transform: none;
+  }
+  
+  .articles-table tr:active {
+    background: rgba(56, 189, 248, 0.1);
+  }
+}
+
+/* Animation d'entrée fluide */
+@keyframes rowSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.articles-table tbody tr {
+  animation: rowSlideIn 0.4s var(--transition-bounce) forwards;
+  opacity: 0;
+}
+
+.articles-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.articles-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.articles-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.articles-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.articles-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+.articles-table tbody tr:nth-child(6) { animation-delay: 0.3s; }
+
+/* Préférence mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .articles-table tbody tr {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .cell-image img {
+    transition: none;
   }
 }
 </style>

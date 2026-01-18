@@ -1,76 +1,107 @@
 /* ===========================================
-   DESIGN SYSTEM - VARIABLES GLOBALES
+   DESIGN SYSTEM - LIQUID GLASS APPLE STYLE
+   Panneaux transparents bleutés avec nuage blanc
    =========================================== */
 
 :root {
-  /* ===== COULEURS PRIMAIRES ===== */
-  --color-primary: #3b82f6;
-  --color-primary-light: #60a5fa;
-  --color-primary-dark: #2563eb;
-  --color-primary-bg: #eff6ff;
+  /* ===== COULEURS PRIMAIRES BLEU ===== */
+  --color-primary: #0ea5e9;
+  --color-primary-light: #38bdf8;
+  --color-primary-dark: #0284c7;
+  --color-primary-bg: rgba(14, 165, 233, 0.15);
 
   /* ===== COULEURS SECONDAIRES ===== */
-  --color-secondary: #8b5cf6;
-  --color-secondary-light: #a78bfa;
-  --color-secondary-dark: #7c3aed;
-  --color-secondary-bg: #f5f3ff;
+  --color-secondary: #6366f1;
+  --color-secondary-light: #818cf8;
+  --color-secondary-dark: #4f46e5;
+  --color-secondary-bg: rgba(99, 102, 241, 0.1);
 
   /* ===== COULEURS DE STATUT ===== */
   --color-success: #22c55e;
   --color-success-light: #4ade80;
   --color-success-dark: #16a34a;
-  --color-success-bg: #f0fdf4;
+  --color-success-bg: rgba(34, 197, 94, 0.15);
 
   --color-warning: #f59e0b;
   --color-warning-light: #fbbf24;
   --color-warning-dark: #d97706;
-  --color-warning-bg: #fffbeb;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
 
   --color-danger: #ef4444;
   --color-danger-light: #f87171;
   --color-danger-dark: #dc2626;
-  --color-danger-bg: #fef2f2;
+  --color-danger-bg: rgba(239, 68, 68, 0.15);
 
   --color-info: #06b6d4;
   --color-info-light: #22d3ee;
   --color-info-dark: #0891b2;
-  --color-info-bg: #ecfeff;
+  --color-info-bg: rgba(6, 182, 212, 0.15);
 
   /* ===== COULEURS NEUTRES ===== */
   --color-white: #ffffff;
   --color-black: #000000;
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
 
-  /* ===== COULEURS DE FOND ===== */
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f9fafb;
-  --color-bg-tertiary: #f3f4f6;
+  /* ===== LIQUID GLASS - Transparences neutres ===== */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg-light: rgba(255, 255, 255, 0.45);
+  --glass-bg-medium: rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-bg-hover: rgba(255, 255, 255, 0.75);
+  
+  /* Teinte neutre pour le verre (pas de bleu) */
+  --glass-tint: rgba(255, 255, 255, 0.5);
+  --glass-tint-strong: rgba(255, 255, 255, 0.7);
+  
+  /* Bordures verre - plus visibles sur fond blanc */
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-light: rgba(0, 0, 0, 0.05);
+  --glass-border-strong: rgba(0, 0, 0, 0.12);
+  
+  /* Effet reflet intérieur */
+  --glass-inner-glow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  --glass-inner-highlight: inset 0 0 20px rgba(255, 255, 255, 0.1);
 
-  /* ===== COULEURS DE TEXTE ===== */
-  --color-text-primary: #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-tertiary: #6b7280;
-  --color-text-muted: #9ca3af;
+  /* ===== COULEURS DE TEXTE - Pour fond clair ===== */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #64748b;
+  --color-text-muted: #94a3b8;
   --color-text-inverse: #ffffff;
+  --color-text-on-glass: #1e293b;
 
-  /* ===== COULEURS DE BORDURE ===== */
-  --color-border-light: #e5e7eb;
-  --color-border-default: #d1d5db;
-  --color-border-dark: #9ca3af;
+  /* ===== BORDURES ARRONDIES - Plus organiques ===== */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-3xl: 40px;
+  --radius-full: 9999px;
+  
+  /* Compatibilité ancien système */
+  --border-radius-none: 0;
+  --border-radius-sm: 12px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 24px;
+  --border-radius-2xl: 32px;
+  --border-radius-full: 9999px;
 
   /* ===== TYPOGRAPHIE ===== */
-  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  --font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-mono: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  --font-family-base: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  --font-family-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   /* Tailles de police */
   --font-size-xs: 0.75rem;    /* 12px */
@@ -112,29 +143,44 @@
 
   /* ===== BORDURES ===== */
   --border-radius-none: 0;
-  --border-radius-sm: 0.25rem;   /* 4px */
-  --border-radius-md: 0.375rem;  /* 6px */
-  --border-radius-lg: 0.5rem;    /* 8px */
-  --border-radius-xl: 0.75rem;   /* 12px */
-  --border-radius-2xl: 1rem;     /* 16px */
+  --border-radius-sm: 12px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 20px;
+  --border-radius-xl: 24px;
+  --border-radius-2xl: 32px;
   --border-radius-full: 9999px;
 
   --border-width-thin: 1px;
-  --border-width-default: 2px;
-  --border-width-thick: 4px;
+  --border-width-default: 1.5px;
+  --border-width-thick: 2px;
 
-  /* ===== OMBRES ===== */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /* ===== OMBRES LIQUID GLASS - Pour fond clair ===== */
+  --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.14);
+  --shadow-2xl: 0 32px 80px rgba(0, 0, 0, 0.16);
+  
+  /* Ombres glass avec reflet subtil */
+  --shadow-glass: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-glass-hover: 
+    0 16px 48px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-glass-float:
+    0 24px 64px rgba(0, 0, 0, 0.14),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
 
-  /* ===== TRANSITIONS ===== */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 350ms ease;
+  /* ===== TRANSITIONS FLUIDES ===== */
+  --transition-fast: 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-normal: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-spring: 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   /* ===== Z-INDEX ===== */
   --z-index-dropdown: 100;

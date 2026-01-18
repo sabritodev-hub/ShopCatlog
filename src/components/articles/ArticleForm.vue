@@ -283,16 +283,17 @@ export default {
 </script>
 
 <style scoped>
+/* ===== ARTICLE FORM - LIQUID GLASS ===== */
 .article-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-5);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-4);
+  gap: var(--spacing-5);
 }
 
 @media (max-width: 480px) {
@@ -304,9 +305,9 @@ export default {
 .photos-section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
-  padding-top: var(--spacing-4);
-  border-top: 1px solid var(--color-border-light);
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-5);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .section-title {
@@ -318,14 +319,14 @@ export default {
 
 .section-description {
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-3);
+  gap: var(--spacing-4);
 }
 
 @media (max-width: 600px) {
@@ -335,7 +336,7 @@ export default {
 }
 
 .field-error {
-  color: var(--color-error);
+  color: #dc2626;
   font-size: var(--font-size-sm);
   margin: 0;
 }

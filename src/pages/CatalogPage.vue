@@ -138,80 +138,155 @@ export default {
 </script>
 
 <style scoped>
+/* ===== CATALOG PAGE - LIQUID GLASS ===== */
 .catalog-page {
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
-/* Header */
+/* Header - Transparent glass */
 .catalog-header {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  color: var(--color-white);
-  padding: var(--spacing-12) var(--spacing-4);
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: var(--spacing-16) var(--spacing-4);
   text-align: center;
+  overflow: hidden;
+}
+
+/* Effet lumineux header */
+.catalog-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
 }
 
 .header-content {
+  position: relative;
   max-width: var(--container-max-width);
   margin: 0 auto;
+  z-index: 1;
 }
 
 .catalog-header h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-2);
-  color: var(--color-white);
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-3);
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeInDown 0.6s var(--transition-bounce) forwards;
 }
 
 .header-subtitle {
-  font-size: var(--font-size-lg);
-  opacity: 0.9;
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
   margin: 0;
-  color: var(--color-white);
+  animation: fadeInUp 0.6s var(--transition-bounce) 0.1s forwards;
+  opacity: 0;
 }
 
-/* Filters */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Filters - Floating glass bar */
 .catalog-filters {
-  background-color: var(--color-white);
-  padding: var(--spacing-6) var(--spacing-4);
-  border-bottom: var(--border-width-thin) solid var(--color-border-light);
   position: sticky;
-  top: 0;
+  top: var(--spacing-4);
   z-index: var(--z-index-sticky);
+  margin: calc(-1 * var(--spacing-8)) var(--spacing-4) 0;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-5);
+  box-shadow: var(--shadow-glass);
+  animation: floatIn 0.5s var(--transition-bounce) 0.2s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes floatIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .filters-container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
   display: flex;
   gap: var(--spacing-4);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .search-input {
   flex: 1;
-  min-width: 250px;
+  min-width: 280px;
 }
 
 .category-filter {
-  min-width: 200px;
+  min-width: 220px;
 }
 
 .results-count {
-  max-width: var(--container-max-width);
-  margin: var(--spacing-4) auto 0;
+  width: 100%;
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-3);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Grid */
 .catalog-grid {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: var(--spacing-8) var(--spacing-4);
+  padding: var(--spacing-10) var(--spacing-4);
 }
 
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-6);
 }
 
@@ -219,34 +294,93 @@ export default {
 .loading-state,
 .empty-state {
   text-align: center;
-  padding: var(--spacing-16) var(--spacing-4);
-  color: var(--color-text-muted);
+  padding: var(--spacing-16) var(--spacing-6);
+  color: var(--color-text-primary);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-glass);
 }
 
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-4);
+  gap: var(--spacing-5);
 }
 
+/* ===== MOBILE ===== */
 @media (max-width: 640px) {
   .catalog-header {
-    padding: var(--spacing-8) var(--spacing-4);
+    padding: var(--spacing-10) var(--spacing-4) var(--spacing-12);
   }
   
   .catalog-header h1 {
     font-size: var(--font-size-3xl);
   }
   
+  .header-subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .catalog-filters {
+    margin: calc(-1 * var(--spacing-6)) var(--spacing-3) 0;
+    padding: var(--spacing-4);
+    border-radius: var(--radius-xl);
+    top: var(--spacing-3);
+  }
+  
   .filters-container {
     flex-direction: column;
+    gap: var(--spacing-3);
   }
   
   .search-input,
   .category-filter {
     width: 100%;
     min-width: auto;
+  }
+  
+  .results-count {
+    text-align: center;
+  }
+  
+  .catalog-grid {
+    padding: var(--spacing-6) var(--spacing-3);
+  }
+  
+  .articles-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+}
+
+/* Tablette */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .articles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .catalog-filters {
+    margin-left: var(--spacing-4);
+    margin-right: var(--spacing-4);
+  }
+}
+
+/* Préférence mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .catalog-header h1,
+  .header-subtitle,
+  .catalog-filters {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 </style>

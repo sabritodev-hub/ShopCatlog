@@ -110,47 +110,77 @@ export default {
 </script>
 
 <style scoped>
+/* ===== LIQUID GLASS MODAL ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-4);
   z-index: var(--z-index-modal);
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
 }
 
 .modal {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-2xl);
+  position: relative;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 32px 80px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: column;
   max-height: 90vh;
   overflow: hidden;
 }
 
+/* Reflet supérieur */
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+}
+
 /* Sizes */
 .modal-sm {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
 .modal-md {
   width: 100%;
-  max-width: 560px;
+  max-width: 580px;
 }
 
 .modal-lg {
   width: 100%;
-  max-width: 720px;
+  max-width: 760px;
 }
 
 .modal-xl {
   width: 100%;
-  max-width: 960px;
+  max-width: 1000px;
 }
 
 .modal-full {
@@ -162,11 +192,13 @@ export default {
 
 /* Header */
 .modal-header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-4) var(--spacing-6);
-  border-bottom: var(--border-width-thin) solid var(--color-border-light);
+  padding: var(--spacing-5) var(--spacing-6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 1;
 }
 
 .modal-title {
@@ -174,50 +206,65 @@ export default {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .modal-close {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--border-radius-md);
-  color: var(--color-text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
   transition: all var(--transition-fast);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .modal-close:hover {
-  background-color: var(--color-gray-100);
+  background: rgba(255, 255, 255, 0.2);
   color: var(--color-text-primary);
+  transform: scale(1.05);
+}
+
+.modal-close:active {
+  transform: scale(0.95);
 }
 
 /* Body */
 .modal-body {
+  position: relative;
   padding: var(--spacing-6);
   overflow-y: auto;
   flex: 1;
+  z-index: 1;
+  color: var(--color-text-primary);
 }
 
 /* Footer */
 .modal-footer {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--spacing-3);
-  padding: var(--spacing-4) var(--spacing-6);
-  border-top: var(--border-width-thin) solid var(--color-border-light);
+  padding: var(--spacing-5) var(--spacing-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 1;
 }
 
-/* Transition */
+/* Transition fluide */
 .modal-enter-active,
 .modal-leave-active {
-  transition: opacity var(--transition-normal);
+  transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .modal-enter-active .modal,
 .modal-leave-active .modal {
-  transition: transform var(--transition-normal), opacity var(--transition-normal);
+  transition: 
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease;
 }
 
 .modal-enter-from,
@@ -225,9 +272,45 @@ export default {
   opacity: 0;
 }
 
-.modal-enter-from .modal,
-.modal-leave-to .modal {
-  transform: scale(0.95);
+.modal-enter-from .modal {
+  transform: scale(0.9) translateY(20px);
   opacity: 0;
+}
+
+.modal-leave-to .modal {
+  transform: scale(0.95) translateY(10px);
+  opacity: 0;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .modal {
+    border-radius: var(--radius-xl);
+    max-height: 85vh;
+  }
+  
+  .modal::before {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
+}
+
+/* Préférence mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .modal-enter-active .modal,
+  .modal-leave-active .modal {
+    transition: opacity 0.2s ease;
+  }
+  
+  .modal-enter-from .modal,
+  .modal-leave-to .modal {
+    transform: none;
+  }
 }
 </style>

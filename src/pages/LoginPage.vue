@@ -153,79 +153,183 @@ export default {
 </script>
 
 <style scoped>
+/* ===== LOGIN PAGE - LIQUID GLASS ===== */
 .login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--color-gray-900) 100%);
-  padding: var(--spacing-4);
+  padding: var(--spacing-6);
+  position: relative;
+  z-index: 1;
 }
 
 .login-container {
+  position: relative;
   width: 100%;
-  max-width: 400px;
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-2xl);
-  padding: var(--spacing-8);
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-glass-float);
+  padding: var(--spacing-10);
+  overflow: hidden;
+}
+
+/* Reflet supérieur */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .login-header {
+  position: relative;
   text-align: center;
   margin-bottom: var(--spacing-8);
+  z-index: 1;
 }
 
 .login-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   display: block;
   margin-bottom: var(--spacing-4);
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 .login-header h1 {
   font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-2);
+  color: var(--color-text-primary);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .login-header p {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .login-form,
 .register-form {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-5);
+  z-index: 1;
 }
 
 .error-message {
-  background-color: var(--color-danger-bg);
-  color: var(--color-danger);
-  padding: var(--spacing-3) var(--spacing-4);
-  border-radius: var(--border-radius-md);
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.2) 0%,
+    rgba(239, 68, 68, 0.1) 100%
+  );
+  color: var(--color-danger-light);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .success-message {
-  background-color: var(--color-success-bg);
-  color: var(--color-success);
-  padding: var(--spacing-3) var(--spacing-4);
-  border-radius: var(--border-radius-md);
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.2) 0%,
+    rgba(34, 197, 94, 0.1) 100%
+  );
+  color: var(--color-success-light);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .login-footer {
+  position: relative;
   margin-top: var(--spacing-6);
   text-align: center;
+  z-index: 1;
+  color: var(--color-text-secondary);
 }
 
 .login-footer a {
-  color: var(--color-primary);
+  color: var(--color-primary-light);
   text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
 }
 
 .login-footer a:hover {
-  text-decoration: underline;
+  color: var(--color-white);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+  .login-page {
+    padding: var(--spacing-4);
+    align-items: flex-start;
+    padding-top: var(--spacing-10);
+  }
+  
+  .login-container {
+    padding: var(--spacing-6);
+    border-radius: var(--radius-xl);
+  }
+  
+  .login-header h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .login-icon {
+    font-size: 2.5rem;
+  }
+  
+  .login-form,
+  .register-form {
+    gap: var(--spacing-4);
+  }
+}
+
+/* Animation d'entrée fluide */
+@keyframes containerSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.login-container {
+  animation: containerSlideIn 0.6s var(--transition-spring) forwards;
+}
+
+/* Préférence mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .login-container {
+    animation: none;
+  }
 }
 </style>

@@ -181,18 +181,38 @@ export default {
   align-items: center;
 }
 
+/* ===== LIQUID GLASS INPUT ===== */
 .input-field {
   width: 100%;
-  border: var(--border-width-thin) solid var(--color-border-default);
-  border-radius: var(--border-radius-lg);
-  background-color: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: var(--color-text-primary);
-  transition: all var(--transition-fast);
+  transition: 
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.input-field:hover:not(:disabled):not(:focus) {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .input-field:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-bg);
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 0 0 4px rgba(56, 189, 248, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  outline: none;
 }
 
 .input-field::placeholder {
@@ -201,33 +221,42 @@ export default {
 
 /* Sizes */
 .input-sm {
-  padding: var(--spacing-2) var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-4);
   font-size: var(--font-size-sm);
+  border-radius: var(--radius-lg);
 }
 
 .input-md {
-  padding: var(--spacing-2) var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-5);
   font-size: var(--font-size-base);
 }
 
 .input-lg {
-  padding: var(--spacing-3) var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-6);
   font-size: var(--font-size-lg);
+  border-radius: var(--radius-2xl);
 }
 
 /* Error state */
 .input-error-state {
-  border-color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.6);
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
 }
 
 .input-error-state:focus {
-  border-color: var(--color-danger);
-  box-shadow: 0 0 0 3px var(--color-danger-bg);
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 
+    0 0 0 4px rgba(239, 68, 68, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .input-error {
   font-size: var(--font-size-sm);
-  color: var(--color-danger);
+  color: var(--color-danger-light);
 }
 
 .input-hint {
@@ -237,9 +266,9 @@ export default {
 
 /* Disabled state */
 .input-wrapper-disabled .input-field {
-  background-color: var(--color-gray-100);
+  background: rgba(255, 255, 255, 0.05);
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 /* Prefix and suffix */
@@ -248,28 +277,29 @@ export default {
   position: absolute;
   display: flex;
   align-items: center;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .input-prefix {
-  left: var(--spacing-3);
+  left: var(--spacing-4);
 }
 
 .input-suffix {
-  right: var(--spacing-3);
+  right: var(--spacing-4);
 }
 
 .input-with-prefix {
-  padding-left: var(--spacing-10);
+  padding-left: var(--spacing-12);
 }
 
 .input-with-suffix {
-  padding-right: var(--spacing-10);
+  padding-right: var(--spacing-12);
 }
 
 /* Textarea */
 textarea.input-field {
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
+  border-radius: var(--radius-xl);
 }
 </style>

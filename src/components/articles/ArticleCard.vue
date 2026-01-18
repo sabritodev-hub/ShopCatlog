@@ -79,6 +79,7 @@ export default {
 </script>
 
 <style scoped>
+/* ===== ARTICLE CARD - LIQUID GLASS ===== */
 .article-header {
   display: flex;
   flex-direction: column;
@@ -94,6 +95,7 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 }
 
 .article-details {
@@ -107,6 +109,7 @@ export default {
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
   margin: 0;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
 }
 
 .article-stock {
@@ -118,19 +121,20 @@ export default {
 }
 
 .stock-icon {
-  font-size: 8px;
+  font-size: 10px;
+  text-shadow: 0 0 8px currentColor;
 }
 
 .stock-available {
-  color: var(--color-success);
+  color: #16a34a;
 }
 
 .stock-low {
-  color: var(--color-warning);
+  color: #d97706;
 }
 
 .stock-empty {
-  color: var(--color-danger);
+  color: #dc2626;
 }
 
 .detail-link {

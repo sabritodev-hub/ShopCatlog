@@ -4,8 +4,18 @@
     <nav v-if="!isLoginPage" class="main-nav">
       <div class="nav-container">
         <router-link to="/" class="nav-logo">
-          <span class="logo-icon">🛒</span>
-          <span class="logo-text">ShopCatalog</span>
+          <svg class="logo-icon-svg" width="32" height="32" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="48" fill="url(#logoGrad)"/>
+            <path d="M30 40 L30 75 C30 78 32 80 35 80 L65 80 C68 80 70 78 70 75 L70 40 Z" fill="white" opacity="0.95"/>
+            <path d="M38 40 L38 32 C38 25 43 20 50 20 C57 20 62 25 62 32 L62 40" fill="none" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <span class="logo-text">Bon plan 69</span>
         </router-link>
         
         <div class="nav-links">
@@ -56,7 +66,7 @@
     <!-- Footer (caché sur la page login) -->
     <footer v-if="!isLoginPage" class="main-footer">
       <div class="footer-container">
-        <p>&copy; 2026 ShopCatalog. Tous droits réservés.</p>
+        <p>&copy; 2026 Bon plan 69. Tous droits réservés.</p>
       </div>
     </footer>
   </div>
@@ -103,13 +113,16 @@ export default {
 </script>
 
 <style>
-/* Navigation */
+/* Navigation - Liquid Glass Style */
 .main-nav {
-  background-color: var(--color-white);
-  border-bottom: var(--border-width-thin) solid var(--color-border-light);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   position: sticky;
   top: 0;
   z-index: var(--z-index-sticky);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .nav-container {
@@ -128,15 +141,26 @@ export default {
   gap: var(--spacing-2);
   text-decoration: none;
   color: var(--color-text-primary);
+  transition: all var(--transition-bounce);
 }
 
-.logo-icon {
-  font-size: var(--font-size-2xl);
+.nav-logo:hover {
+  transform: scale(1.02);
+}
+
+.logo-icon-svg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
 }
 
 .logo-text {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .nav-links {
@@ -150,25 +174,29 @@ export default {
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-2) var(--spacing-4);
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--radius-lg);
   text-decoration: none;
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-bounce);
+  background: transparent;
+  border: none;
 }
 
 .nav-link:hover {
-  background-color: var(--color-gray-100);
+  background: rgba(255, 255, 255, 0.8);
   color: var(--color-text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .nav-link-active {
-  background-color: var(--color-primary-bg);
+  background: rgba(56, 189, 248, 0.12);
   color: var(--color-primary);
 }
 
 .nav-link-active:hover {
-  background-color: var(--color-primary-bg);
+  background: rgba(56, 189, 248, 0.18);
   color: var(--color-primary);
 }
 
@@ -177,10 +205,12 @@ export default {
   min-height: calc(100vh - var(--header-height) - 80px);
 }
 
-/* Footer */
+/* Footer - Liquid Glass Style */
 .main-footer {
-  background-color: var(--color-gray-800);
-  color: var(--color-gray-400);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   padding: var(--spacing-6) var(--spacing-4);
 }
 
@@ -193,15 +223,11 @@ export default {
 .footer-container p {
   margin: 0;
   font-size: var(--font-size-sm);
-  color: var(--color-gray-400);
+  color: var(--color-text-secondary);
 }
 
 /* Responsive */
 @media (max-width: 640px) {
-  .logo-text {
-    display: none;
-  }
-  
   .nav-link span {
     display: none;
   }
@@ -220,7 +246,7 @@ export default {
 }
 
 .logout-btn:hover {
-  color: var(--color-danger);
-  background-color: var(--color-danger-bg);
+  color: #dc2626;
+  background: rgba(239, 68, 68, 0.1);
 }
 </style>
