@@ -57,8 +57,8 @@
                             <img :src="photo" :alt="`Photo ${index + 1}`" />
                         </button>
                     </div>
-                    <!-- Infos sous la galerie (mobile/desktop) -->
-                    <div class="gallery-info-duplicate">
+                    <!-- Infos sous la galerie (MOBILE ONLY) -->
+                    <div class="gallery-info-mobile">
                         <BaseBadge
                             :color="article.categorie_couleur"
                             size="md"
@@ -117,6 +117,22 @@
                             <h3>Description</h3>
                             <p>{{ article.description }}</p>
                         </div>
+
+                        <!-- Variantes Section - Mobile -->
+                        <div
+                            v-if="hasVariantes"
+                            class="variantes-section-mobile"
+                        >
+                            <h3>Variantes disponibles</h3>
+                            <VarianteSelector
+                                :variantes-groupees="variantesGroupees"
+                                :selected-variantes="selectedVariantes"
+                                @update:selected-variantes="
+                                    selectedVariantes = $event
+                                "
+                                @variante-selected="onVarianteSelected"
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -173,14 +189,8 @@
                         <p>{{ article.description }}</p>
                     </div>
 
-                    <!-- Variantes Section -->
-                    <div
-                        v-if="
-                            variantesGroupees &&
-                            Object.keys(variantesGroupees).length > 0
-                        "
-                        class="variantes-section"
-                    >
+                    <!-- Variantes Section - Desktop -->
+                    <div v-if="hasVariantes" class="variantes-section">
                         <h2>Variantes disponibles</h2>
                         <VarianteSelector
                             :variantes-groupees="variantesGroupees"
@@ -190,6 +200,41 @@
                             "
                             @variante-selected="onVarianteSelected"
                         />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Variante Image -->
+        <div
+            v-if="showVarianteModal"
+            class="variante-modal-overlay"
+            @click="closeVarianteModal"
+        >
+            <div class="variante-modal" @click.stop>
+                <button class="modal-close" @click="closeVarianteModal">
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+                <div class="modal-content">
+                    <img
+                        v-if="selectedVarianteImage"
+                        :src="selectedVarianteImage"
+                        :alt="selectedVarianteName"
+                        class="modal-image"
+                    />
+                    <div class="modal-info">
+                        <h2>{{ selectedVarianteName }}</h2>
+                        <p class="modal-type">{{ selectedVarianteType }}</p>
                     </div>
                 </div>
             </div>
@@ -221,6 +266,10 @@ export default {
             imageError: false,
             variantesGroupees: {},
             selectedVariantes: {},
+            showVarianteModal: false,
+            selectedVarianteImage: null,
+            selectedVarianteName: "",
+            selectedVarianteType: "",
         };
     },
     computed: {
@@ -246,6 +295,14 @@ export default {
             if (this.article.quantite > 10) return "in-stock";
             if (this.article.quantite > 0) return "low-stock";
             return "out-of-stock";
+        },
+        hasVariantes() {
+            // Mieux que Object.keys() avec Proxy
+            return (
+                this.variantesGroupees &&
+                typeof this.variantesGroupees === "object" &&
+                Object.keys(this.variantesGroupees).length > 0
+            );
         },
     },
     async created() {
@@ -286,10 +343,8 @@ export default {
             this.imageError = true;
         },
         onVarianteSelected(data) {
-            console.log("Variante sélectionnée:", data.type, data.item);
-            // Vous pouvez ici mettre à jour l'image principale si la variante a une image
+            // Mettre à jour l'image principale
             if (data.item.image_url) {
-                // Chercher et afficher l'image de la variante
                 const index = this.allPhotos.findIndex(
                     (photo) => photo === data.item.image_url,
                 );
@@ -297,6 +352,20 @@ export default {
                     this.currentImageIndex = index;
                 }
             }
+
+            // Ouvrir la popup si image existe
+            if (data.item.image_url) {
+                this.selectedVarianteImage = data.item.image_url;
+                this.selectedVarianteName = data.item.valeur;
+                this.selectedVarianteType = data.type;
+                this.showVarianteModal = true;
+            }
+        },
+        closeVarianteModal() {
+            this.showVarianteModal = false;
+            this.selectedVarianteImage = null;
+            this.selectedVarianteName = "";
+            this.selectedVarianteType = "";
         },
     },
 };
@@ -490,6 +559,9 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.06);
     padding: var(--spacing-8);
     box-shadow: var(--shadow-glass);
+    width: 100%;
+    height: auto;
+    overflow: visible;
 }
 
 /* Reflet info section */
@@ -507,10 +579,12 @@ export default {
     );
     pointer-events: none;
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    z-index: 0;
 }
 
 .article-title {
     position: relative;
+    z-index: 1;
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
@@ -521,6 +595,7 @@ export default {
 
 .article-price {
     position: relative;
+    z-index: 1;
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-primary-light);
@@ -530,6 +605,7 @@ export default {
 
 .stock-info {
     position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-2);
@@ -561,6 +637,7 @@ export default {
 
 .article-description {
     position: relative;
+    z-index: 1;
     padding-top: var(--spacing-5);
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
@@ -581,15 +658,23 @@ export default {
 /* Variantes Section */
 .variantes-section {
     position: relative;
+    z-index: 1;
     padding-top: var(--spacing-5);
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .variantes-section h2 {
     font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: #111827;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
     margin: 0 0 var(--spacing-4) 0;
+}
+
+.variantes-section-mobile {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    overflow: visible;
 }
 
 .article-actions {
@@ -688,13 +773,21 @@ export default {
     }
 }
 
+@keyframes glassSlideInInfo {
+    from {
+        transform: translateY(40px) scale(0.95);
+    }
+    to {
+        transform: translateY(0) scale(1);
+    }
+}
+
 .gallery-section {
     animation: glassSlideIn 0.6s var(--transition-spring) forwards;
 }
 
 .info-section {
-    animation: glassSlideIn 0.6s var(--transition-spring) 0.15s forwards;
-    opacity: 0;
+    animation: glassSlideInInfo 0.6s var(--transition-spring) 0.15s forwards;
 }
 
 /* Préférence mouvement réduit */
@@ -709,6 +802,242 @@ export default {
     .back-btn,
     .main-image img {
         transition: none;
+    }
+}
+
+/* ===== VARIANTES SECTIONS ===== */
+
+.gallery-info-mobile {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    padding: var(--spacing-6);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.gallery-info-mobile .info-badge {
+    width: fit-content;
+}
+
+.gallery-info-mobile .article-title-small,
+.gallery-info-mobile .article-price-small {
+    margin: 0;
+}
+
+.gallery-info-mobile .article-title-small {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+.gallery-info-mobile .article-price-small {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-light);
+}
+
+/* Hide gallery-info-mobile on desktop */
+@media (min-width: 768px) {
+    .gallery-info-mobile {
+        display: none;
+    }
+}
+
+.variantes-section,
+.variantes-section-mobile {
+    margin-top: var(--spacing-6);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    width: 100%;
+    overflow: visible;
+}
+
+.variantes-section h2,
+.variantes-section-mobile h3 {
+    margin: 0 0 var(--spacing-4) 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Hide desktop variantes on mobile */
+.variantes-section {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .variantes-section {
+        display: block;
+    }
+
+    .variantes-section-mobile {
+        display: none;
+    }
+}
+
+/* ===== VARIANTE MODAL ===== */
+.variante-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--spacing-4);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.variante-modal {
+    position: relative;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-2xl);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.4s ease-out;
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 200ms ease;
+    z-index: 10;
+    color: var(--color-text-primary);
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg);
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    padding: var(--spacing-8);
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.modal-info {
+    text-align: center;
+}
+
+.modal-info h2 {
+    margin: 0 0 var(--spacing-2) 0;
+    font-size: var(--font-size-2xl);
+    color: var(--color-text-primary);
+}
+
+.modal-type {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: var(--font-weight-medium);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+    .variante-modal {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+
+    .modal-content {
+        padding: var(--spacing-6);
+    }
+
+    .modal-image {
+        max-height: 400px;
+    }
+
+    .modal-info h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    /* MOBILE: Hide desktop sections */
+    .variantes-section {
+        display: none;
+    }
+
+    .variantes-section-mobile {
+        display: block;
+    }
+
+    .info-section {
+        display: none;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* DESKTOP: Show desktop sections only */
+@media (min-width: 769px) {
+    .variantes-section {
+        display: block;
+    }
+
+    .variantes-section-mobile {
+        display: none;
+    }
+
+    .info-section {
+        display: block;
     }
 }
 </style>
