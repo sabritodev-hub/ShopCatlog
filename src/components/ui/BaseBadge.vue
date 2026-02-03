@@ -1,116 +1,116 @@
 <template>
-  <span :class="badgeClasses">
-    <slot></slot>
-  </span>
+    <span :class="badgeClasses">
+        <slot></slot>
+    </span>
 </template>
 
 <script>
 export default {
-  name: 'BaseBadge',
-  props: {
-    variant: {
-      type: String,
-      default: 'default',
-      validator: (value) => ['default', 'primary', 'secondary', 'success', 'warning', 'danger', 'info'].includes(value)
+    name: "BaseBadge",
+    props: {
+        variant: {
+            type: String,
+            default: "default",
+            validator: (value) =>
+                [
+                    "default",
+                    "primary",
+                    "secondary",
+                    "success",
+                    "warning",
+                    "danger",
+                    "info",
+                ].includes(value),
+        },
+        size: {
+            type: String,
+            default: "md",
+            validator: (value) => ["sm", "md", "lg"].includes(value),
+        },
+        rounded: {
+            type: Boolean,
+            default: false,
+        },
     },
-    size: {
-      type: String,
-      default: 'md',
-      validator: (value) => ['sm', 'md', 'lg'].includes(value)
+    computed: {
+        badgeClasses() {
+            return [
+                "badge",
+                `badge-${this.variant}`,
+                `badge-${this.size}`,
+                {
+                    "badge-rounded": this.rounded,
+                },
+            ];
+        },
     },
-    rounded: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    badgeClasses() {
-      return [
-        'badge',
-        `badge-${this.variant}`,
-        `badge-${this.size}`,
-        {
-          'badge-rounded': this.rounded
-        }
-      ]
-    }
-  }
-}
+};
 </script>
 
 <style scoped>
-/* ===== BASE BADGE - LIQUID GLASS ===== */
+/* ===== MODERN BADGE 2026 ===== */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-full);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all var(--transition-bounce);
+    display: inline-flex;
+    align-items: center;
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
 }
 
 /* Sizes */
 .badge-sm {
-  padding: var(--spacing-1) var(--spacing-3);
-  font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-xs);
 }
 
 .badge-md {
-  padding: var(--spacing-2) var(--spacing-4);
-  font-size: var(--font-size-sm);
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
 }
 
 .badge-lg {
-  padding: var(--spacing-3) var(--spacing-5);
-  font-size: var(--font-size-base);
+    padding: var(--spacing-3) var(--spacing-5);
+    font-size: var(--font-size-base);
 }
 
-/* Variants - Light glass style */
+/* Variants - Modern minimalistes */
 .badge-default {
-  background: rgba(255, 255, 255, 0.7);
-  color: var(--color-text-primary);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #f3f4f6;
+    color: var(--color-text-primary);
 }
 
 .badge-primary {
-  background: rgba(56, 189, 248, 0.15);
-  color: #0284c7;
-  border: 1px solid rgba(56, 189, 248, 0.25);
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
 }
 
 .badge-secondary {
-  background: rgba(139, 92, 246, 0.15);
-  color: #7c3aed;
-  border: 1px solid rgba(139, 92, 246, 0.25);
+    background: var(--color-secondary-bg);
+    color: var(--color-secondary);
 }
 
 .badge-success {
-  background: rgba(34, 197, 94, 0.15);
-  color: #16a34a;
-  border: 1px solid rgba(34, 197, 94, 0.25);
+    background: var(--color-success-bg);
+    color: var(--color-success);
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.15);
-  color: #d97706;
-  border: 1px solid rgba(245, 158, 11, 0.25);
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
 }
 
 .badge-danger {
-  background: rgba(239, 68, 68, 0.15);
-  color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
 }
 
 .badge-info {
-  background: rgba(6, 182, 212, 0.15);
-  color: #0891b2;
-  border: 1px solid rgba(6, 182, 212, 0.25);
+    background: var(--color-info-bg);
+    color: var(--color-info);
 }
 
-/* Rounded - déjà pill par défaut, donc max rounded */
+/* Rounded */
 .badge-rounded {
-  border-radius: var(--radius-full);
+    border-radius: var(--radius-full);
 }
 </style>

@@ -4,11 +4,14 @@
  * Les articles sont reliés aux catégories via categorie_id
  */
 
-import { supabase } from '@/lib/supabase.js'
-import { articles as mockArticles, categories as mockCategories } from '@/data/articles.js'
+import { supabase } from "@/lib/supabase.js";
+import {
+  articles as mockArticles,
+  categories as mockCategories,
+} from "@/data/articles.js";
 
 // Nom de la table dans Supabase
-const TABLE_NAME = 'articles'
+const TABLE_NAME = "articles";
 
 // Flag pour utiliser les données mock si Supabase n'est pas configuré
 const useSupabase = () => {
@@ -17,7 +20,7 @@ const useSupabase = () => {
 }
 
 // Stockage local pour le mode mock
-let mockData = [...mockArticles]
+let mockData = [...mockArticles];
 
 /**
  * Récupère tous les articles avec leurs catégories
@@ -25,33 +28,35 @@ let mockData = [...mockArticles]
  */
 export async function getArticles() {
   if (!useSupabase()) {
-    await delay(200)
-    return [...mockData]
+    await delay(200);
+    return [...mockData];
   }
 
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select(`
+    .select(
+      `
       *,
       categories:categorie_id (
         id,
         nom,
         couleur
       )
-    `)
-    .order('id', { ascending: true })
+    `,
+    )
+    .order("id", { ascending: true });
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
   // Transformer les données pour compatibilité avec l'ancien format
-  return (data || []).map(article => ({
+  return (data || []).map((article) => ({
     ...article,
-    categorie: article.categories?.nom || 'Non catégorisé',
-    categorie_couleur: article.categories?.couleur || '#6b7280'
-  }))
+    categorie: article.categories?.nom || "Non catégorisé",
+    categorie_couleur: article.categories?.couleur || "#6b7280",
+  }));
 }
 
 /**
@@ -61,38 +66,40 @@ export async function getArticles() {
  */
 export async function getArticleById(id) {
   if (!useSupabase()) {
-    await delay(100)
-    return mockData.find(a => a.id === parseInt(id)) || null
+    await delay(100);
+    return mockData.find((a) => a.id === parseInt(id)) || null;
   }
 
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select(`
+    .select(
+      `
       *,
       categories:categorie_id (
         id,
         nom,
         couleur
       )
-    `)
-    .eq('id', id)
-    .single()
+    `,
+    )
+    .eq("id", id)
+    .single();
 
   if (error) {
-    if (error.code === 'PGRST116') return null
-    console.error('Erreur Supabase:', error)
-    throw error
+    if (error.code === "PGRST116") return null;
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
   if (data) {
     return {
       ...data,
-      categorie: data.categories?.nom || 'Non catégorisé',
-      categorie_couleur: data.categories?.couleur || '#6b7280'
-    }
+      categorie: data.categories?.nom || "Non catégorisé",
+      categorie_couleur: data.categories?.couleur || "#6b7280",
+    };
   }
 
-  return data
+  return data;
 }
 
 /**
@@ -102,33 +109,35 @@ export async function getArticleById(id) {
  */
 export async function getArticlesByCategory(categorieId) {
   if (!useSupabase()) {
-    await delay(200)
-    return mockData.filter(a => a.categorie_id === categorieId)
+    await delay(200);
+    return mockData.filter((a) => a.categorie_id === categorieId);
   }
 
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select(`
+    .select(
+      `
       *,
       categories:categorie_id (
         id,
         nom,
         couleur
       )
-    `)
-    .eq('categorie_id', categorieId)
-    .order('id', { ascending: true })
+    `,
+    )
+    .eq("categorie_id", categorieId)
+    .order("id", { ascending: true });
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
-  return (data || []).map(article => ({
+  return (data || []).map((article) => ({
     ...article,
-    categorie: article.categories?.nom || 'Non catégorisé',
-    categorie_couleur: article.categories?.couleur || '#6b7280'
-  }))
+    categorie: article.categories?.nom || "Non catégorisé",
+    categorie_couleur: article.categories?.couleur || "#6b7280",
+  }));
 }
 
 /**
@@ -138,9 +147,9 @@ export async function getArticlesByCategory(categorieId) {
  */
 export async function createArticle(articleData) {
   if (!useSupabase()) {
-    await delay(300)
+    await delay(300);
     const newArticle = {
-      id: Math.max(...mockData.map(a => a.id), 0) + 1,
+      id: Math.max(...mockData.map((a) => a.id), 0) + 1,
       nom: articleData.nom,
       description: articleData.description || null,
       prix: parseFloat(articleData.prix),
@@ -151,46 +160,50 @@ export async function createArticle(articleData) {
       photo_4: articleData.photo_4 || null,
       photo_5: articleData.photo_5 || null,
       categorie_id: articleData.categorie_id,
-      categorie: articleData.categorie
-    }
-    mockData.push(newArticle)
-    return newArticle
+      categorie: articleData.categorie,
+    };
+    mockData.push(newArticle);
+    return newArticle;
   }
 
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .insert([{
-      nom: articleData.nom,
-      description: articleData.description || null,
-      prix: parseFloat(articleData.prix),
-      quantite: parseInt(articleData.quantite),
-      photo: articleData.photo,
-      photo_2: articleData.photo_2 || null,
-      photo_3: articleData.photo_3 || null,
-      photo_4: articleData.photo_4 || null,
-      photo_5: articleData.photo_5 || null,
-      categorie_id: articleData.categorie_id
-    }])
-    .select(`
+    .insert([
+      {
+        nom: articleData.nom,
+        description: articleData.description || null,
+        prix: parseFloat(articleData.prix),
+        quantite: parseInt(articleData.quantite),
+        photo: articleData.photo,
+        photo_2: articleData.photo_2 || null,
+        photo_3: articleData.photo_3 || null,
+        photo_4: articleData.photo_4 || null,
+        photo_5: articleData.photo_5 || null,
+        categorie_id: articleData.categorie_id,
+      },
+    ])
+    .select(
+      `
       *,
       categories:categorie_id (
         id,
         nom,
         couleur
       )
-    `)
-    .single()
+    `,
+    )
+    .single();
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
   return {
     ...data,
-    categorie: data.categories?.nom || 'Non catégorisé',
-    categorie_couleur: data.categories?.couleur || '#6b7280'
-  }
+    categorie: data.categories?.nom || "Non catégorisé",
+    categorie_couleur: data.categories?.couleur || "#6b7280",
+  };
 }
 
 /**
@@ -201,11 +214,11 @@ export async function createArticle(articleData) {
  */
 export async function updateArticle(id, articleData) {
   if (!useSupabase()) {
-    await delay(300)
-    const index = mockData.findIndex(a => a.id === parseInt(id))
-    if (index === -1) return null
-    mockData[index] = { ...mockData[index], ...articleData }
-    return mockData[index]
+    await delay(300);
+    const index = mockData.findIndex((a) => a.id === parseInt(id));
+    if (index === -1) return null;
+    mockData[index] = { ...mockData[index], ...articleData };
+    return mockData[index];
   }
 
   const { data, error } = await supabase
@@ -220,29 +233,31 @@ export async function updateArticle(id, articleData) {
       photo_3: articleData.photo_3 || null,
       photo_4: articleData.photo_4 || null,
       photo_5: articleData.photo_5 || null,
-      categorie_id: articleData.categorie_id
+      categorie_id: articleData.categorie_id,
     })
-    .eq('id', id)
-    .select(`
+    .eq("id", id)
+    .select(
+      `
       *,
       categories:categorie_id (
         id,
         nom,
         couleur
       )
-    `)
-    .single()
+    `,
+    )
+    .single();
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
   return {
     ...data,
-    categorie: data.categories?.nom || 'Non catégorisé',
-    categorie_couleur: data.categories?.couleur || '#6b7280'
-  }
+    categorie: data.categories?.nom || "Non catégorisé",
+    categorie_couleur: data.categories?.couleur || "#6b7280",
+  };
 }
 
 /**
@@ -252,24 +267,21 @@ export async function updateArticle(id, articleData) {
  */
 export async function deleteArticle(id) {
   if (!useSupabase()) {
-    await delay(200)
-    const index = mockData.findIndex(a => a.id === parseInt(id))
-    if (index === -1) return false
-    mockData.splice(index, 1)
-    return true
+    await delay(200);
+    const index = mockData.findIndex((a) => a.id === parseInt(id));
+    if (index === -1) return false;
+    mockData.splice(index, 1);
+    return true;
   }
 
-  const { error } = await supabase
-    .from(TABLE_NAME)
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from(TABLE_NAME).delete().eq("id", id);
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
-  return true
+  return true;
 }
 
 /**
@@ -278,33 +290,33 @@ export async function deleteArticle(id) {
  */
 export async function getCategories() {
   if (!useSupabase()) {
-    await delay(100)
-    return [...mockCategories]
+    await delay(100);
+    return [...mockCategories];
   }
 
   // Essayer d'abord de récupérer depuis la table categories
   const { data: categoriesData, error: categoriesError } = await supabase
-    .from('categories')
-    .select('nom')
-    .order('nom', { ascending: true })
+    .from("categories")
+    .select("nom")
+    .order("nom", { ascending: true });
 
   if (!categoriesError && categoriesData && categoriesData.length > 0) {
-    return categoriesData.map(c => c.nom)
+    return categoriesData.map((c) => c.nom);
   }
 
   // Fallback: récupérer les catégories depuis les articles existants
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select('categorie')
-    .order('categorie', { ascending: true })
+    .select("categorie")
+    .order("categorie", { ascending: true });
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
-  const categories = [...new Set(data.map(item => item.categorie))]
-  return categories
+  const categories = [...new Set(data.map((item) => item.categorie))];
+  return categories;
 }
 
 /**
@@ -314,26 +326,27 @@ export async function getCategories() {
  */
 export async function searchArticles(query) {
   if (!useSupabase()) {
-    await delay(200)
-    const searchTerm = query.toLowerCase()
-    return mockData.filter(a =>
-      a.nom.toLowerCase().includes(searchTerm) ||
-      a.categorie.toLowerCase().includes(searchTerm)
-    )
+    await delay(200);
+    const searchTerm = query.toLowerCase();
+    return mockData.filter(
+      (a) =>
+        a.nom.toLowerCase().includes(searchTerm) ||
+        a.categorie.toLowerCase().includes(searchTerm),
+    );
   }
 
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select('*')
+    .select("*")
     .or(`nom.ilike.%${query}%,categorie.ilike.%${query}%`)
-    .order('id', { ascending: true })
+    .order("id", { ascending: true });
 
   if (error) {
-    console.error('Erreur Supabase:', error)
-    throw error
+    console.error("Erreur Supabase:", error);
+    throw error;
   }
 
-  return data || []
+  return data || [];
 }
 
 /**
@@ -342,40 +355,38 @@ export async function searchArticles(query) {
  */
 export async function seedDatabase() {
   if (!useSupabase()) {
-    console.log('Supabase non configuré')
-    return false
+    console.log("Supabase non configuré");
+    return false;
   }
 
   try {
     const { data: existing } = await supabase
       .from(TABLE_NAME)
-      .select('id')
-      .limit(1)
+      .select("id")
+      .limit(1);
 
     if (existing && existing.length > 0) {
-      console.log('Données déjà présentes')
-      return false
+      console.log("Données déjà présentes");
+      return false;
     }
 
-    const articlesToInsert = mockArticles.map(({ id, ...rest }) => rest)
-    
-    const { error } = await supabase
-      .from(TABLE_NAME)
-      .insert(articlesToInsert)
+    const articlesToInsert = mockArticles.map(({ id, ...rest }) => rest);
 
-    if (error) throw error
+    const { error } = await supabase.from(TABLE_NAME).insert(articlesToInsert);
 
-    console.log('Base initialisée avec succès')
-    return true
+    if (error) throw error;
+
+    console.log("Base initialisée avec succès");
+    return true;
   } catch (error) {
-    console.error('Erreur seeding:', error)
-    return false
+    console.error("Erreur seeding:", error);
+    return false;
   }
 }
 
 // Utilitaire pour simuler un délai réseau
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Export par défaut de l'API
@@ -387,5 +398,5 @@ export default {
   updateArticle,
   deleteArticle,
   getCategories,
-  searchArticles
-}
+  searchArticles,
+};
