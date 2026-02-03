@@ -15,9 +15,9 @@ const TABLE_NAME = "articles";
 
 // Flag pour utiliser les données mock si Supabase n'est pas configuré
 const useSupabase = () => {
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY
-  return key && key !== '' && key !== 'VOTRE_CLE_ANON'
-}
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  return key && key !== "" && key !== "VOTRE_CLE_ANON";
+};
 
 // Stockage local pour le mode mock
 let mockData = [...mockArticles];
@@ -389,6 +389,148 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * ==========================================
+ * GESTION DES VARIANTES D'ARTICLES
+ * ==========================================
+ */
+
+/**
+ * Récupère toutes les variantes d'un article
+ * @param {number} articleId - ID de l'article
+ * @returns {Promise<Array>} Liste des variantes
+ */
+export async function getVariantes(articleId) {
+  if (!useSupabase()) {
+    await delay(100);
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("article_variantes")
+    .select("*")
+    .eq("article_id", articleId)
+    .order("nom_variante", { ascending: true });
+
+  if (error) {
+    console.error("Erreur Supabase:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Crée une nouvelle variante pour un article
+ * @param {number} articleId - ID de l'article
+ * @param {Object} varianteData - {nom_variante, valeur, image_url}
+ * @returns {Promise<Object>} La variante créée
+ */
+export async function createVariante(articleId, varianteData) {
+  if (!useSupabase()) {
+    await delay(200);
+    return {
+      id: Math.random(),
+      article_id: articleId,
+      ...varianteData,
+      created_at: new Date().toISOString(),
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("article_variantes")
+    .insert({
+      article_id: articleId,
+      nom_variante: varianteData.nom_variante,
+      valeur: varianteData.valeur,
+      image_url: varianteData.image_url || null,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Erreur création variante:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+/**
+ * Modifie une variante
+ * @param {number} varianteId - ID de la variante
+ * @param {Object} varianteData - Données à mettre à jour
+ * @returns {Promise<Object>} La variante modifiée
+ */
+export async function updateVariante(varianteId, varianteData) {
+  if (!useSupabase()) {
+    await delay(200);
+    return { id: varianteId, ...varianteData };
+  }
+
+  const { data, error } = await supabase
+    .from("article_variantes")
+    .update(varianteData)
+    .eq("id", varianteId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Erreur modification variante:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+/**
+ * Supprime une variante
+ * @param {number} varianteId - ID de la variante
+ * @returns {Promise<boolean>} true si supprimée
+ */
+export async function deleteVariante(varianteId) {
+  if (!useSupabase()) {
+    await delay(150);
+    return true;
+  }
+
+  const { error } = await supabase
+    .from("article_variantes")
+    .delete()
+    .eq("id", varianteId);
+
+  if (error) {
+    console.error("Erreur suppression variante:", error);
+    throw error;
+  }
+
+  return true;
+}
+
+/**
+ * Récupère les variantes groupées par type
+ * Utile pour afficher les sélecteurs dans le détail article
+ * @param {number} articleId - ID de l'article
+ * @returns {Promise<Object>} {type: [valeur1, valeur2, ...]}
+ */
+export async function getVariantesGroupees(articleId) {
+  const variantes = await getVariantes(articleId);
+  const grouped = {};
+
+  variantes.forEach((v) => {
+    if (!grouped[v.nom_variante]) {
+      grouped[v.nom_variante] = [];
+    }
+    grouped[v.nom_variante].push({
+      id: v.id,
+      valeur: v.valeur,
+      image_url: v.image_url,
+    });
+  });
+
+  return grouped;
+}
+
 // Export par défaut de l'API
 export default {
   getArticles,
@@ -399,4 +541,9 @@ export default {
   deleteArticle,
   getCategories,
   searchArticles,
+  getVariantes,
+  createVariante,
+  updateVariante,
+  deleteVariante,
+  getVariantesGroupees,
 };
