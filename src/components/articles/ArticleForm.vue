@@ -106,11 +106,7 @@
                 <p class="section-description">
                     Ajoutez des variantes comme couleur, taille, modèle, etc.
                 </p>
-                <VarianteInput
-                    v-model="form.variantes"
-                    @add="onVarianteAdded"
-                    @delete="onVarianteDeleted"
-                />
+                <VarianteInput v-model="form.variantes" />
             </div>
         </form>
 
@@ -137,12 +133,6 @@ import {
 } from "@/components/ui";
 import VarianteInput from "@/components/articles/VarianteInput.vue";
 import { getCategories } from "@/services/categoryService.js";
-import {
-    createVariante,
-    updateVariante,
-    deleteVariante,
-    getVariantes,
-} from "@/services/articleService.js";
 
 export default {
     name: "ArticleForm",
@@ -236,10 +226,17 @@ export default {
                     variantes: [],
                 };
 
-                // Charger les variantes existantes
+                // Charger les variantes existantes - sans les importer directement
+                // Juste charger les IDs et les données pour affichage
                 try {
+                    const { getVariantes } =
+                        await import("@/services/articleService.js");
                     const variantes = await getVariantes(this.article.id);
-                    this.form.variantes = variantes;
+                    // Stocker telles quelles, elles seront gérées lors de la soumission
+                    this.form.variantes = variantes.map((v) => ({
+                        ...v,
+                        _tempId: v.id.toString(),
+                    }));
                 } catch (error) {
                     console.error("Erreur chargement variantes:", error);
                 }
@@ -293,7 +290,9 @@ export default {
                     articleData.id = this.article.id;
                 }
 
-                this.$emit("submit", articleData);
+                // Emettre avec les variantes
+                console.log("Submit avec variantes:", this.form.variantes);
+                this.$emit("submit", articleData, this.form.variantes);
                 this.close();
             } finally {
                 this.loading = false;
@@ -321,30 +320,6 @@ export default {
         close() {
             this.$emit("update:modelValue", false);
             this.resetForm();
-        },
-        async onVarianteAdded(variante) {
-            // Créer la variante en base de données si l'article existe
-            if (this.articleId) {
-                try {
-                    await createVariante(this.articleId, {
-                        nom_variante: variante.nom_variante,
-                        valeur: variante.valeur,
-                        image_url: variante.image_url || null,
-                    });
-                } catch (error) {
-                    console.error("Erreur création variante:", error);
-                }
-            }
-        },
-        async onVarianteDeleted(varianteId) {
-            // Supprimer la variante en base de données
-            if (this.articleId && varianteId !== undefined) {
-                try {
-                    await deleteVariante(varianteId);
-                } catch (error) {
-                    console.error("Erreur suppression variante:", error);
-                }
-            }
         },
     },
 };
