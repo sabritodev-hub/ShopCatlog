@@ -1,0 +1,93 @@
+<svg width="4096" height="4096" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4096 4096">
+  <defs>
+    <!-- Filtres pour effet marbre -->
+    <filter id="marbleNoise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="6" result="noise" seed="2" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="120" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <filter id="marbleSmooth">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+    </filter>
+
+    <filter id="veinsFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="5" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="80" />
+    </filter>
+
+    <!-- Gradients pour les teintes de marbre -->
+    <radialGradient id="baseMarble" cx="35%" cy="45%">
+      <stop offset="0%" style="stop-color:#f8f9fc;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#f5f7fb;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#eff3f8;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#e8eff5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dfe9f0;stop-opacity:1" />
+    </radialGradient>
+
+    <linearGradient id="violetVeins" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:0" />
+      <stop offset="35%" style="stop-color:#a855f7;stop-opacity:0.08" />
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:0.12" />
+      <stop offset="65%" style="stop-color:#a855f7;stop-opacity:0.06" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0" />
+    </linearGradient>
+
+    <linearGradient id="blueVeins" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0" />
+      <stop offset="30%" style="stop-color:#6366f1;stop-opacity:0.07" />
+      <stop offset="50%" style="stop-color:#6366f1;stop-opacity:0.1" />
+      <stop offset="70%" style="stop-color:#6366f1;stop-opacity:0.05" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0" />
+    </linearGradient>
+
+    <!-- Pattern subtil pour texture -->
+    <pattern id="subtleGrain" x="64" y="64" width="64" height="64" patternUnits="userSpaceOnUse">
+      <rect width="64" height="64" fill="#f5f7fb" opacity="0.3"/>
+      <circle cx="16" cy="16" r="1.5" fill="#a855f7" opacity="0.02"/>
+      <circle cx="48" cy="32" r="1" fill="#6366f1" opacity="0.02"/>
+      <circle cx="32" cy="48" r="1.2" fill="#a855f7" opacity="0.015"/>
+      <circle cx="64" cy="64" r="1.8" fill="#6366f1" opacity="0.015"/>
+    </pattern>
+  </defs>
+
+  <!-- Base marbre blanc -->
+  <rect width="4096" height="4096" fill="url(#baseMarble)"/>
+
+  <!-- Couche texture principale avec bruit -->
+  <rect width="4096" height="4096" fill="#f5f7fb" opacity="0.3" filter="url(#marbleNoise)"/>
+
+  <!-- Veines violettes principales -->
+  <g opacity="0.6" filter="url(#veinsFilter)">
+    <path d="M 0,800 Q 512,600 1024,900 T 2048,1200 T 3072,800 T 4096,1000" stroke="url(#violetVeins)" stroke-width="180" fill="none"/>
+    <path d="M 200,2000 Q 800,2200 1400,2100 T 2800,2300 T 4096,2050" stroke="url(#violetVeins)" stroke-width="140" fill="none"/>
+    <path d="M 0,3200 Q 600,3100 1200,3300 T 2400,3150 T 3600,3400 T 4096,3100" stroke="url(#violetVeins)" stroke-width="160" fill="none"/>
+  </g>
+
+  <!-- Veines bleues complémentaires -->
+  <g opacity="0.5" filter="url(#veinsFilter)">
+    <path d="M 300,500 Q 900,700 1500,600 T 2700,800 T 4096,500" stroke="url(#blueVeins)" stroke-width="200" fill="none"/>
+    <path d="M 0,2400 Q 700,2500 1400,2350 T 3000,2600 T 4096,2300" stroke="url(#blueVeins)" stroke-width="170" fill="none"/>
+    <path d="M 400,3600 Q 1000,3700 1600,3550 T 3100,3750 T 4096,3650" stroke="url(#blueVeins)" stroke-width="150" fill="none"/>
+  </g>
+
+  <!-- Veines fines supplémentaires pour plus de détail -->
+  <g opacity="0.4">
+    <path d="M 0,1500 Q 400,1400 800,1550 T 1600,1500 T 2400,1600 T 3200,1450 T 4096,1550" stroke="#a855f7" stroke-width="60" fill="none" opacity="0.04"/>
+    <path d="M 200,2700 Q 600,2600 1000,2750 T 1800,2700 T 2600,2800 T 3400,2650 T 4096,2750" stroke="#6366f1" stroke-width="70" fill="none" opacity="0.035"/>
+    <path d="M 0,400 Q 500,300 1000,450 T 2000,400 T 3000,500 T 4096,350" stroke="#a855f7" stroke-width="50" fill="none" opacity="0.03"/>
+  </g>
+
+  <!-- Pattern grain subtil -->
+  <rect width="4096" height="4096" fill="url(#subtleGrain)"/>
+
+  <!-- Vignette douce aux coins pour plus de profondeur -->
+  <radialGradient id="softVignette" cx="50%" cy="50%" r="70%">
+    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0" />
+    <stop offset="70%" style="stop-color:#ffffff;stop-opacity:0" />
+    <stop offset="100%" style="stop-color:#dfe9f0;stop-opacity:0.08" />
+  </radialGradient>
+  <rect width="4096" height="4096" fill="url(#softVignette)"/>
+
+  <!-- Lissage final subtil -->
+  <rect width="4096" height="4096" fill="#f5f7fb" opacity="0.02" filter="url(#marbleSmooth)"/>
+</svg>

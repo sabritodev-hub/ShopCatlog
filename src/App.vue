@@ -1,5 +1,8 @@
 <template>
-    <div id="app">
+    <div id="app" class="app-with-marble-bg">
+        <!-- Background marbre -->
+        <div class="marble-bg"></div>
+
         <!-- Navigation (cachée sur la page login) -->
         <nav v-if="!isLoginPage" class="main-nav">
             <div class="nav-container">
@@ -301,10 +304,10 @@ export default {
 
 /* Footer - Moderne */
 .main-footer {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-top: 1px solid #e5e7eb;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: none;
     padding: var(--spacing-6) var(--spacing-4);
     position: relative;
     z-index: 1;
@@ -347,5 +350,32 @@ export default {
 .logout-btn:hover {
     color: #ef4444;
     background: rgba(239, 68, 68, 0.08);
+}
+
+/* ===== Marble Background ===== */
+#app {
+    position: relative;
+    min-height: 100vh;
+}
+
+.marble-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("./assets/MarbreBackground.png");
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #f5f7fb;
+    background-repeat: repeat;
+    background-position: center;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.app-with-marble-bg {
+    position: relative;
+    z-index: 0;
 }
 </style>

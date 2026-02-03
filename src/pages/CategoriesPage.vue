@@ -393,12 +393,11 @@ export default {
 /* Header - Glass transparent neutre */
 .page-header {
     position: relative;
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
     padding: var(--spacing-8);
-    box-shadow: var(--shadow-glass);
     animation: headerSlideIn 0.6s var(--transition-spring) forwards;
 }
 
