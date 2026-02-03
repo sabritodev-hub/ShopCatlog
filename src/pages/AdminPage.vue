@@ -448,10 +448,10 @@ export default {
 /* Header - Glass transparent */
 .admin-header {
     position: relative;
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
     padding: var(--spacing-8) var(--spacing-4);
 }
 

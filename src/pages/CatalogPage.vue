@@ -155,15 +155,16 @@ export default {
 /* ===== CATALOG PAGE - MODERN 2026 ===== */
 .catalog-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    position: relative;
+    z-index: 1;
 }
 
 /* Header */
 .catalog-header {
-    background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: none;
     padding: var(--spacing-16) var(--spacing-4);
-    text-align: center;
 }
 
 .header-content {
