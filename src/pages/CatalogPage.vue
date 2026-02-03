@@ -223,6 +223,7 @@ export default {
     border-radius: var(--radius-lg);
     padding: var(--spacing-5);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: visible;
 }
 
 .filters-container {

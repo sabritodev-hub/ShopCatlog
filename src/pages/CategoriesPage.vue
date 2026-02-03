@@ -554,36 +554,23 @@ export default {
 /* Category card - Liquid glass */
 .category-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: var(--radius-2xl);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
     padding: var(--spacing-5);
     display: flex;
     align-items: center;
     gap: var(--spacing-4);
-    transition: all var(--transition-bounce);
-    animation: cardSlideIn 0.5s var(--transition-spring) forwards;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    animation: cardSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     opacity: 0;
-    overflow: hidden;
+    overflow: visible;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Reflet card */
+/* Reflet card - SUPPRIME */
 .category-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.5) 0%,
-        transparent 100%
-    );
-    pointer-events: none;
-    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    display: none;
 }
 
 .category-card:nth-child(1) {
@@ -620,10 +607,9 @@ export default {
 }
 
 .category-card:hover {
-    box-shadow: var(--shadow-glass-hover);
-    transform: translateY(-6px) scale(1.02);
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    border-color: #d1d5db;
 }
 
 /* Color indicator with glow */

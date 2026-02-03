@@ -156,56 +156,65 @@ export default {
 
 .select-container {
     position: relative;
+    z-index: 10;
 }
 
 /* Select field - Modern */
 .select-field {
     width: 100%;
     border: 1px solid #d1d5db;
-    border-radius: var(--radius-md);
-    background: #ffffff;
-    color: var(--color-text-primary);
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #000000;
     cursor: pointer;
     appearance: none;
-    padding-right: var(--spacing-10);
-    transition: all var(--transition-fast);
+    padding: 10px 40px 10px 12px;
+    transition: all 150ms ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    font-size: 16px;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
+        sans-serif;
 }
 
 .select-field:hover {
-    background: #ffffff;
+    background-color: #f9fafb;
     border-color: #9ca3af;
 }
 
 .select-field:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow:
-        0 0 0 3px var(--color-primary-bg),
-        0 2px 8px rgba(99, 102, 241, 0.2);
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+    border-color: #6366f1;
 }
 
 /* Style dropdown options */
 .select-field option {
-    background: white;
-    color: var(--color-text-primary);
-    padding: var(--spacing-2);
+    background-color: white;
+    color: black;
+    padding: 8px;
+    line-height: 1.5;
+}
+
+.select-field option:checked {
+    background-color: #6366f1;
+    color: white;
 }
 
 /* Sizes */
 .select-sm {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-sm);
+    padding: 8px 40px 8px 12px !important;
+    font-size: 14px !important;
 }
 
 .select-md {
-    padding: var(--spacing-2) var(--spacing-4);
-    font-size: var(--font-size-base);
+    padding: 10px 40px 10px 12px !important;
+    font-size: 16px !important;
 }
 
 .select-lg {
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-lg);
+    padding: 12px 40px 12px 16px !important;
+    font-size: 18px !important;
 }
 
 /* Arrow */
